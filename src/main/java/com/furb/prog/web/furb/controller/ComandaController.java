@@ -42,15 +42,18 @@ public class ComandaController {
         if (!comandas.isEmpty()) {
             return ResponseEntity.ok().body(collect);
         }
+
         return ResponseEntity.noContent().build();
     }
 
     @GetMapping("/{id}")
     public ResponseEntity<ComandaProdutoDAO> detalhar(@PathVariable Long id) {
         Comanda comanda = comandaService.obterPorId(id);
+
         if (comanda != null) {
             return ResponseEntity.ok().body(modelMapper.map(comanda, ComandaProdutoDAO.class));
         }
+
         return ResponseEntity.noContent().build();
     }
 

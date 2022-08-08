@@ -35,6 +35,7 @@ public class ComandaService {
     @ApiOperation(value="Deleta uma comanda")
     public String excluirComanda(Long id) {
         Comanda comanda = obterPorId(id);
+
         if (comanda != null) {
             repository.deleteById(id);
 
