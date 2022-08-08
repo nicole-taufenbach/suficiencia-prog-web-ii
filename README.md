@@ -24,7 +24,7 @@
 
 <h2>Para o Swagger acessar a seguinte URL:</h2>
 <ul>
-  <li>localhost:8080/swagger-ui/index.html/</>
+  <li>http://localhost:8080/swagger-ui.html</>
 </ul>
 
 
