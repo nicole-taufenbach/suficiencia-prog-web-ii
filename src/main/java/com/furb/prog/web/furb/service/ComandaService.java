@@ -1,15 +1,13 @@
 package com.furb.prog.web.furb.service;
 
-import com.furb.prog.web.furb.dao.ComandaDAO;
 import com.furb.prog.web.furb.model.Comanda;
 import com.furb.prog.web.furb.repository.ComandaRepository;
-import org.modelmapper.ModelMapper;
+import io.swagger.annotations.ApiOperation;
+import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
-import javax.persistence.EntityNotFoundException;
+import java.util.List;
 
 @Service
 public class ComandaService {
@@ -17,31 +15,38 @@ public class ComandaService {
     @Autowired
     private ComandaRepository repository;
 
-    @Autowired
-    private ModelMapper modelMapper;
+    @ApiOperation(value="Retorna uma lista de Comandas")
+    public List<Comanda> obterTodos() {
+        return repository.findAll();
+    }
 
-    public Page<ComandaDAO> obterTodos(Pageable paginacao) {
+    @ApiOperation(value="Retorna uma comanda única")
+    public Comanda obterPorId(Long id) {
         return repository
-                .findAll(paginacao)
-                .map(p -> modelMapper.map(p, ComandaDAO.class));
+                .findById(id)
+                .orElse(null);
     }
 
-    public ComandaDAO obterPorId(Long id) {
-        Comanda comanda = repository.findById(id)
-                .orElseThrow(EntityNotFoundException::new);
-
-        return modelMapper.map(comanda, ComandaDAO.class);
+    @ApiOperation(value="Salva uma comanda")
+    public Comanda criarComanda(Comanda comanda) {
+        return repository.save(comanda);
     }
 
-    public ComandaDAO criarComanda(ComandaDAO dao) {
-        Comanda comanda = modelMapper.map(dao, Comanda.class);
-        repository.save(comanda);
+    @ApiOperation(value="Deleta uma comanda")
+    public String excluirComanda(Long id) {
+        Comanda comanda = obterPorId(id);
+        if (comanda != null) {
+            repository.deleteById(id);
 
-        return modelMapper.map(comanda, ComandaDAO.class);
-    }
+            return new JSONObject()
+                    .put("success", new JSONObject().put("text", "comanda removida"))
+                    .toString();
+        }
 
-    public void excluirComanda(Long id) {
-        repository.deleteById(id);
+        return null;
     }
 
 }
+
+
+

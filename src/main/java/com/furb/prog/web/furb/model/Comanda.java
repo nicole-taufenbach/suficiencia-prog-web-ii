@@ -1,21 +1,32 @@
 package com.furb.prog.web.furb.model;
 
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
-import java.math.BigDecimal;
-import java.util.ArrayList;
+import javax.persistence.*;
+import java.util.List;
 
-@Getter
-@Setter
+@Entity
+@Table(name = "comandas")
+@AllArgsConstructor
 @NoArgsConstructor
+@Data
 public class Comanda {
 
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
+    @Column(nullable = false)
     private Long idUsuario;
-    private BigDecimal nomeUsuario;
+
+    @Column(nullable = false)
+    private String nomeUsuario;
+
+    @Column(nullable = false)
     private String telefoneUsuario;
-    private ArrayList<Produto> produtos;
+
+    @Column(nullable = false)
+    @OneToMany(cascade = CascadeType.ALL)
+    private List<Produto> produtos;
 
 }
